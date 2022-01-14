@@ -1,0 +1,36 @@
+Package: motifscanR
+Type: Package
+Title: Tools for Scanning TF motif on DNA regions
+Version: 0.9.0
+Authors@R: person("Zhijie", "Guo", email = "guozhijie@picb.ac.cn",
+                  role = c("aut", "cre"))
+Description: Given a set of input genomic regions, motifscanR scans 
+     the sequences to detect the occurrences of known motifs. It can 
+     also applies a statistical test on each motif to check whether 
+     the motif is significantly over- or under-represented (enriched or depleted) 
+     in the input genomic regions compared to another set of control regions.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Depends: R (>= 4.0.3)
+Imports: 
+    TFBSTools,
+    Biostrings,
+    BSgenome,
+    GenomeInfoDb,
+    GenomicRanges,
+    GenomicFeatures,
+    Rcpp,
+    Rsamtools,
+    S4Vectors,
+    JASPAR2020,
+    parallel
+RoxygenNote: 7.1.2
+LinkingTo: 
+    Rcpp,
+    RcppArmadillo
+Suggests: 
+    BSgenome.Hsapiens.UCSC.hg19,
+    TxDb.Hsapiens.UCSC.hg19.knownGene,
+    testthat (>= 3.0.0)
+Date: 2021-10-14
