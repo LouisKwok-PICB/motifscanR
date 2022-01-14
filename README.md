@@ -6,7 +6,7 @@ Given a set of input genomic regions, motifscanR scans the sequences to detect t
 
 # Citation
 
-To cite the motifscanr package in publications, please use
+To cite the motifscanR package in publications, please use
 
 > [Sun, H., Wang, J., Gong, Z. et al.  *Quantitative integration of epigenomic variation and transcription factor binding using MAmotif toolkit identifies an important role of IRF2 as transcription activator at gene promoters.* Cell Discov 4, **38** (2018).](https://doi.org/10.1038/s41421-018-0045-y)
 
