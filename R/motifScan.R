@@ -107,7 +107,7 @@ motifScan_helper <- function(pwms, seqs, genome, bg, p.cutoff, out, ranges,
 #'  SummarizedExperiment output if out is "matches" or "scores" or will be used
 #'  to give absolute positions of motifs if out is "positions"
 #' @param cutoff.matrix.loc the location of local motif score cutoff file, if the file is
-#'  not present, motifscanr will generate by itself and save in the current
+#'  not present, motifscanR will generate by itself and save in the current
 #'  working directory as './species_collect_cutoff_motifs_matrix.Rdata'(default),
 #'  and the user could specify a specific file directory with 'save_path', so user
 #'  could use the next time if the pwms and the genome are same.
