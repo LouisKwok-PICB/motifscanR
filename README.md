@@ -45,6 +45,7 @@ The input object of genomic regions could be either [GenomicRanges](https://kasp
  between two sets of genomic regions with `motifEnrichment` function. 
 
 ```r
+# Get a motif pwms
 example_motifs <- getJasparMotifs(species = "Homo sapiens",
                                   collection = "CORE")
 # Make a set of input regions
