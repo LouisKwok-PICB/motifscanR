@@ -21,7 +21,7 @@ BiocManager::install('LouisKwok-PICB/motifscanR')
 
 # Usage
 
-`motifscanR` could be used for DNA sequences motif enrichment analysis
+`motifscanR` could be used for genomic regions motif enrichment analysis
 with `motifScan` function. 
 ```r
 library(motifscanR)
@@ -39,11 +39,11 @@ peaks <- GenomicRanges::GRanges(seqnames = c("chr1","chr2","chr2"),
 # Scan motif for example motifs
 motif_ix <- motifScan(example_motifs, peaks, genome = "BSgenome.Hsapiens.UCSC.hg19")
 ```
-The input object of DNA sequences could be either [GenomicRanges](https://kasperdanielhansen.github.io/genbioconductor/html/GenomicRanges_GRanges.html), [DNAStringSet](https://kasperdanielhansen.github.io/genbioconductor/html/Biostrings.html), 
+The input object of genomic regions could be either [GenomicRanges](https://kasperdanielhansen.github.io/genbioconductor/html/GenomicRanges_GRanges.html), [DNAStringSet](https://kasperdanielhansen.github.io/genbioconductor/html/Biostrings.html), 
 [DNAString](https://kasperdanielhansen.github.io/genbioconductor/html/Biostrings.html), or character vector. You could see more detail with `?motifScan`
 
-`motifscanR` could also be used for DNA sequences motif enrichment analysis
- between two sets of DNA sequences with `motifEnrichment` function. 
+`motifscanR` could also be used for genomic regions motif enrichment analysis
+ between two sets of genomic regions with `motifEnrichment` function. 
 
 ```r
 example_motifs <- getJasparMotifs(species = "Homo sapiens",
