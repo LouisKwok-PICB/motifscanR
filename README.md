@@ -32,8 +32,7 @@ example_motifs <- getJasparMotifs(species = "Homo sapiens",
 
 # Make a set of peaks
 peaks <- GenomicRanges::GRanges(seqnames = c("chr1","chr2","chr2"),
-                ranges = IRanges::IRanges(start = c(76585873,42772928,
-                                          100183786),
+                ranges = IRanges::IRanges(start = c(76585873,42772928,100183786),
                                           width = 500))
 
 # Scan motif for example motifs
@@ -50,13 +49,11 @@ example_motifs <- getJasparMotifs(species = "Homo sapiens",
                                   collection = "CORE")
 # Make a set of input regions
 Input <- GenomicRanges::GRanges(seqnames = c("chr1","chr2","chr2"),
-                                ranges = IRanges::IRanges(start = c(76585873,42772928,
-                                                                    100183786),
+                                ranges = IRanges::IRanges(start = c(76585873,42772928,100183786),
                                                           width = 500))
 # Make a set of control regions
 Control <- GenomicRanges::GRanges(seqnames = c("chr1","chr3","chr5"),
-                                  ranges = IRanges::IRanges(start = c(453123,6524593,
-                                                                      100184233),
+                                  ranges = IRanges::IRanges(start = c(453123,6524593,100184233),
                                                             width = 500))
 # Scan motif for example motifs
 motif_ix_input <- motifScan(example_motifs, Input, genome = "BSgenome.Hsapiens.UCSC.hg19")
