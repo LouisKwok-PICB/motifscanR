@@ -25,6 +25,8 @@ BiocManager::install('LouisKwok-PICB/motifscanR')
 with `motifScan` function. 
 ```r
 library(motifscanR)
+library(JASPAR2020)
+library(BSgenome.Hsapiens.UCSC.hg19)
 
 # Get a motif pwms
 example_motifs <- getJasparMotifs(species = "Homo sapiens",
