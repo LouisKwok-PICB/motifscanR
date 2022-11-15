@@ -38,8 +38,8 @@ get_motif_ix_plus <- function(pwms, seqs, genome, p.cutoff, thread, random.seed,
     }
   }), ncol = dim(motif_sites)[2])
   motif_sites_length <- matrix(sapply(motif_sites, length), ncol = dim(motif_sites)[2])
-  return(list(motifScans=motif_sites_length,
-              motifScore=motif_sites_score,
+  return(list(motifScore=motif_sites_score,
+              motifScans=motif_sites_length,
               motifCount=motif_sites_length))
 }
 

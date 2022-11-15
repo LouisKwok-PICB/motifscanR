@@ -3,11 +3,17 @@ motifScan_helper <- function(pwms, seqs, genome, bg, p.cutoff, out, ranges,
   if (p.cutoff %ni% c(0.01, 0.001, 1e-04, 1e-05, 1e-06)) {
     stop("p.cutoff should be one of [0.01, 0.001, 1e-04, 1e-05, 1e-06]!")
   }
+  convert_pwm_message <- "pwm convertion section"
+  message(gettextf("################ %s ################", convert_pwm_message))
+  message(gettextf("converting PWM...", convert_pwm_message))
   motif_mats <- convert_pwms(pwms, bg, "log")
   for (pwm_name in names(pwms)) {
     pwms[[pwm_name]]@profileMatrix <- motif_mats[[pwm_name]]
   }
-
+  
+  load_cutoff_mat_message <- "motif scan section"
+  message(gettextf("################ %s ################", load_cutoff_mat_message))
+  message(gettextf("Loading background cutoff matrix...", load_cutoff_mat_message))
   if (out == "matches") {
     tmp_out <- get_motif_ix(pwms, seqs, genome, p.cutoff, thread, random.seed, cutoff.matrix.loc)
     if (is.null(ranges)) {
@@ -73,6 +79,7 @@ motifScan_helper <- function(pwms, seqs, genome, bg, p.cutoff, out, ranges,
     }
     stopCluster(cl)
   }
+  message("ALL DONE! Congratulation!")
   return(out)
 }
 
