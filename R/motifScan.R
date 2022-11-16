@@ -163,7 +163,7 @@ setMethod("motifScan", signature(pwms = "PWMatrixList",
                    out = c("matches", "scores", "positions"),
                    p.cutoff = 1e-04, ranges = NULL,
                    thread = 1, random.seed = NULL, cutoff.matrix.loc  = './') {
-            message('cheing input arugements...')
+            message('Checking input arugements...')
             out <- match.arg(out)
 
             if (is.numeric(bg)){
@@ -190,7 +190,7 @@ setMethod("motifScan", signature(pwms = "PWMatrixList",
                    out = c("matches", "scores",  "positions"),
                    p.cutoff = 1e-04, ranges = NULL,
                    thread = 1, random.seed = NULL, cutoff.matrix.loc = './') {
-            message('cheing input arugements...')
+            message('Checking input arugements...')
             out <- match.arg(out)
 
             if (is.numeric(bg)){
@@ -215,7 +215,7 @@ setMethod("motifScan", signature(pwms = "PWMatrixList",
                    out = c("matches", "scores", "positions"),
                    p.cutoff = 1e-04, ranges = NULL,
                    thread = 1, random.seed = NULL, cutoff.matrix.loc = './') {
-            message('cheing input arugements...')
+            message('Checking input arugements...')
             out <- match.arg(out)
 
             if (is.numeric(bg)){
@@ -242,7 +242,7 @@ setMethod("motifScan", signature(pwms = "PWMatrixList",
                    out = c("matches", "scores", "positions"),
                    p.cutoff = 1e-04, thread = 1,
                    random.seed = NULL, cutoff.matrix.loc = './') {
-            message('cheing input arugements...')
+            message('Checking input arugements...')
             out <- match.arg(out)
             GenomicRanges::strand(subject) <- "+"
             subject_seq <- subject
@@ -273,7 +273,7 @@ setMethod("motifScan", signature(pwms = "PWMatrixList",
                    out = c("matches", "scores", "positions"),
                    p.cutoff = 1e-04, thread = 1,
                    random.seed = NULL, cutoff.matrix.loc = './') {
-            message('cheing input arugements...')
+            message('Checking input arugements...')
             out <- match.arg(out)
             motifScan(pwms, rowRanges(subject),
                       genome = genome,
@@ -294,7 +294,7 @@ setMethod("motifScan", signature(pwms = "PWMatrixList",
                    out = c("matches", "scores", "positions"),
                    p.cutoff = 1e-04, thread = 1,
                    random.seed = NULL, cutoff.matrix.loc = './') {
-            message('cheing input arugements...')
+            message('Checking input arugements...')
             out <- match.arg(out)
             seqs <- as.character(subject)
             ranges <- BSgenome::granges(subject)
