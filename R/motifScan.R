@@ -4,16 +4,16 @@ motifScan_helper <- function(pwms, seqs, genome, bg, p.cutoff, out, ranges,
     stop("p.cutoff should be one of [0.01, 0.001, 1e-04, 1e-05, 1e-06]!")
   }
   convert_pwm_message <- "pwm convertion section"
-  message(gettextf("################ %s ################", convert_pwm_message))
-  message(gettextf("converting PWM...", convert_pwm_message))
+  message(gettextf("\n################ %s ################", convert_pwm_message))
+  message("converting PWM...")
   motif_mats <- convert_pwms(pwms, bg, "log")
   for (pwm_name in names(pwms)) {
     pwms[[pwm_name]]@profileMatrix <- motif_mats[[pwm_name]]
   }
   
   load_cutoff_mat_message <- "motif scan section"
-  message(gettextf("################ %s ################", load_cutoff_mat_message))
-  message(gettextf("Loading background cutoff matrix...", load_cutoff_mat_message))
+  message(gettextf("\n################ %s ################", load_cutoff_mat_message))
+  message("Loading background cutoff matrix...")
   if (out == "matches") {
     tmp_out <- get_motif_ix(pwms, seqs, genome, p.cutoff, thread, random.seed, cutoff.matrix.loc)
     if (is.null(ranges)) {
@@ -163,6 +163,7 @@ setMethod("motifScan", signature(pwms = "PWMatrixList",
                    out = c("matches", "scores", "positions"),
                    p.cutoff = 1e-04, ranges = NULL,
                    thread = 1, random.seed = NULL, cutoff.matrix.loc  = './') {
+            message('cheing input arugements...')
             out <- match.arg(out)
 
             if (is.numeric(bg)){
@@ -189,7 +190,7 @@ setMethod("motifScan", signature(pwms = "PWMatrixList",
                    out = c("matches", "scores",  "positions"),
                    p.cutoff = 1e-04, ranges = NULL,
                    thread = 1, random.seed = NULL, cutoff.matrix.loc = './') {
-
+            message('cheing input arugements...')
             out <- match.arg(out)
 
             if (is.numeric(bg)){
@@ -214,7 +215,7 @@ setMethod("motifScan", signature(pwms = "PWMatrixList",
                    out = c("matches", "scores", "positions"),
                    p.cutoff = 1e-04, ranges = NULL,
                    thread = 1, random.seed = NULL, cutoff.matrix.loc = './') {
-
+            message('cheing input arugements...')
             out <- match.arg(out)
 
             if (is.numeric(bg)){
@@ -241,6 +242,7 @@ setMethod("motifScan", signature(pwms = "PWMatrixList",
                    out = c("matches", "scores", "positions"),
                    p.cutoff = 1e-04, thread = 1,
                    random.seed = NULL, cutoff.matrix.loc = './') {
+            message('cheing input arugements...')
             out <- match.arg(out)
             GenomicRanges::strand(subject) <- "+"
             subject_seq <- subject
@@ -271,6 +273,7 @@ setMethod("motifScan", signature(pwms = "PWMatrixList",
                    out = c("matches", "scores", "positions"),
                    p.cutoff = 1e-04, thread = 1,
                    random.seed = NULL, cutoff.matrix.loc = './') {
+            message('cheing input arugements...')
             out <- match.arg(out)
             motifScan(pwms, rowRanges(subject),
                       genome = genome,
@@ -291,7 +294,7 @@ setMethod("motifScan", signature(pwms = "PWMatrixList",
                    out = c("matches", "scores", "positions"),
                    p.cutoff = 1e-04, thread = 1,
                    random.seed = NULL, cutoff.matrix.loc = './') {
-
+            message('cheing input arugements...')
             out <- match.arg(out)
             seqs <- as.character(subject)
             ranges <- BSgenome::granges(subject)

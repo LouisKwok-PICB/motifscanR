@@ -33,3 +33,8 @@ NULL
 .onUnload <- function(libpath) {
   library.dynam.unload("motifscanR", libpath)
 }
+
+# Display startup message
+.onAttach <- function(libname, pkgname) {
+  packageStartupMessage("motifscanR 0.9.0 2022-11-16")
+}

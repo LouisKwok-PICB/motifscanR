@@ -1,10 +1,10 @@
 get_motif_ix <- function(pwms, seqs, genome, p.cutoff, thread, random.seed, loc.file){
   cutoff_motifs_matrix <- NULL
   if (file_test("-f", loc.file)) {
-    message("Found motif score cutoff matrix.\n")
+    message("Found motif score cutoff matrix.")
     load(loc.file)
   }else{
-    message("Not found motif score cutoff matrix.\n")
+    message("Not found motif score cutoff matrix.")
     cutoff_motifs_matrix <- motifs_cutoff(pwms, genome, random.seed=random.seed)
     save(cutoff_motifs_matrix, file = loc.file)
   }
@@ -18,10 +18,10 @@ get_motif_ix <- function(pwms, seqs, genome, p.cutoff, thread, random.seed, loc.
 get_motif_ix_plus <- function(pwms, seqs, genome, p.cutoff, thread, random.seed, loc.file){
   cutoff_motifs_matrix <- NULL
   if (file_test("-f", loc.file)) {
-    message("Found motif score cutoff matrix.\n")
+    message("Found motif score cutoff matrix.")
     load(loc.file)
   }else{
-    message("Not found motif score cutoff matrix.\n")
+    message("Not found motif score cutoff matrix.")
     cutoff_motifs_matrix <- motifs_cutoff(pwms, genome, random.seed=random.seed)
     save(cutoff_motifs_matrix, file = loc.file)
   }
@@ -47,10 +47,10 @@ get_motif_ix_plus <- function(pwms, seqs, genome, p.cutoff, thread, random.seed,
 get_motif_positions <- function(pwms, seqs, genome, p.cutoff, thread, random.seed, loc.file){
   cutoff_motifs_matrix <- NULL
   if (file_test("-f", loc.file)) {
-    message("Found motif score cutoff matrix.\n")
+    message("Found motif score cutoff matrix.")
     load(loc.file)
   }else{
-    message("Not found motif score cutoff matrix.\n")
+    message("Not found motif score cutoff matrix.")
     cutoff_motifs_matrix <- motifs_cutoff(pwms, genome, random.seed=random.seed)
     save(cutoff_motifs_matrix, file = loc.file)
   }
@@ -201,13 +201,13 @@ motifs_cutoff <- function(pwms, genome,
   if (random_n < 100) {
     stop("each motif must have at least 100 sampling scores")
   }
-  message("Generating motifs score cutoff matrix...\n")
+  message("  Generating motifs score cutoff matrix...")
   max_len <- do.call(max, lapply(pwms, length))
-  message("Selecting random sequences from genome...")
+  message("    Selecting random sequences from genome...")
   random_seqs <- random_genome(random_n, genome, max_len, random.seed)
   rc_random_seqs <- as.character(reverseComplement(DNAStringSet(random_seqs)))
   pwms_cutoff <- PWMCutoffList(pwms)
-  message('Begin to scan motif score...')
+  message('Begin to scan motif score for random sequences...')
   start_time <- Sys.time()
   sampling_scores <- t(as.matrix(as.data.frame(lapply(pwms_cutoff@listData,
                                                       function(pwm){
@@ -224,7 +224,7 @@ motifs_cutoff <- function(pwms, genome,
                                                       }))))
   end_time <- Sys.time()
   duration <- difftime(end_time, start_time)
-  message(paste("Took", round(duration[[1]], 2),  units(duration), "to run.\n"))
+  message(paste("  Took", round(duration[[1]], 2),  units(duration), "to run."))
   pwms_add_score <- setCutoff(pwms_cutoff, sampling_scores)
   return(pwms_add_score)
 }
@@ -234,7 +234,7 @@ motifs_cutoff <- function(pwms, genome,
 random_genome <- function(n_select, genome, len, random.seed = NULL){
   set.seed(random.seed)
 
-  message("Calculating chromosome weight...")
+  message("    Calculating chromosome weight...")
   start_time <- Sys.time()
   if (class(genome) == "FaFile") {
     chorm_length <- seqlengths(genome)
@@ -247,9 +247,9 @@ random_genome <- function(n_select, genome, len, random.seed = NULL){
   }
   end_time <- Sys.time()
   duration <- difftime(end_time, start_time)
-  message(paste("Took", round(duration[[1]], 2),  units(duration), "to run.\n"))
+  message(paste("    Took", round(duration[[1]], 2),  units(duration), "to run."))
 
-  message("Generating random sequences...")
+  message("    Generating random sequences...")
   random_start <- Sys.time()
   random_chroms <- sample(names(chrom_weight), n_select,
                           prob = chrom_weight, replace = TRUE)
@@ -283,7 +283,7 @@ random_genome <- function(n_select, genome, len, random.seed = NULL){
 
   random_end <- Sys.time()
   random_duration <- difftime(random_end, random_start)
-  message(paste("Took", round(random_duration[[1]], 2),  units(random_duration), "to run.\n"))
+  message(paste("    Took", round(random_duration[[1]], 2),  units(random_duration), "to run.\n"))
   return(seqs)
 }
 
