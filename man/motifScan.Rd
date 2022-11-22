@@ -145,8 +145,9 @@ or specify the cutoff matrix file by user himself with parameter cutoff.matrix.n
 
 \item{cutoff.matrix.name}{the name of local motif score cutoff file, if the file is
 not present, motifscanR will generate by itself and save in the current
-working directory as './[cutoff.matrix.name]_cutoff_motifs_matrix.Rdata'(default),
-and the user could specify a specific file directory with 'save_path', so user
+working directory as './species_collect_cutoff_motifs_matrix.Rdata'(default),
+and the user could specify a specific file directory with 'save_path',
+then save as './[cutoff.matrix.name]_cutoff_motifs_matrix.Rdata, so user
 could use the next time if the pwms and the genome are same.}
 }
 \value{
