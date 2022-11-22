@@ -36,5 +36,5 @@ NULL
 
 # Display startup message
 .onAttach <- function(libname, pkgname) {
-  packageStartupMessage("motifscanR 0.9.0 2022-11-16")
+  packageStartupMessage("motifscanR 0.9.2 2022-11-22")
 }

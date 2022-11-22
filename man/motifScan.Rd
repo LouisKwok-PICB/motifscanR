@@ -25,7 +25,8 @@ motifScan(pwms, subject, ...)
   ranges = NULL,
   thread = 1,
   random.seed = NULL,
-  cutoff.matrix.loc = "./"
+  cutoff.matrix.loc = "./",
+  cutoff.matrix.name = NULL
 )
 
 \S4method{motifScan}{PWMatrixList,character}(
@@ -38,7 +39,8 @@ motifScan(pwms, subject, ...)
   ranges = NULL,
   thread = 1,
   random.seed = NULL,
-  cutoff.matrix.loc = "./"
+  cutoff.matrix.loc = "./",
+  cutoff.matrix.name = NULL
 )
 
 \S4method{motifScan}{PWMatrixList,DNAString}(
@@ -51,7 +53,8 @@ motifScan(pwms, subject, ...)
   ranges = NULL,
   thread = 1,
   random.seed = NULL,
-  cutoff.matrix.loc = "./"
+  cutoff.matrix.loc = "./",
+  cutoff.matrix.name = NULL
 )
 
 \S4method{motifScan}{PWMatrixList,GenomicRanges}(
@@ -63,7 +66,8 @@ motifScan(pwms, subject, ...)
   p.cutoff = 1e-04,
   thread = 1,
   random.seed = NULL,
-  cutoff.matrix.loc = "./"
+  cutoff.matrix.loc = "./",
+  cutoff.matrix.name = NULL
 )
 
 \S4method{motifScan}{PWMatrixList,RangedSummarizedExperiment}(
@@ -75,7 +79,8 @@ motifScan(pwms, subject, ...)
   p.cutoff = 1e-04,
   thread = 1,
   random.seed = NULL,
-  cutoff.matrix.loc = "./"
+  cutoff.matrix.loc = "./",
+  cutoff.matrix.name = NULL
 )
 
 \S4method{motifScan}{PWMatrixList,BSgenomeViews}(
@@ -86,7 +91,8 @@ motifScan(pwms, subject, ...)
   p.cutoff = 1e-04,
   thread = 1,
   random.seed = NULL,
-  cutoff.matrix.loc = "./"
+  cutoff.matrix.loc = "./",
+  cutoff.matrix.name = NULL
 )
 
 \S4method{motifScan}{PFMatrixList,ANY}(pwms, subject, ...)
@@ -132,8 +138,14 @@ to give absolute positions of motifs if out is "positions"}
 \item{random.seed}{seed number for random program}
 
 \item{cutoff.matrix.loc}{the location of local motif score cutoff file, if the file is
-not present, motifscanr will generate by itself and save in the current
+not present, motifscanR will generate by itself and save in the current
 working directory as './species_collect_cutoff_motifs_matrix.Rdata'(default),
+and the user could specify a specific file directory with 'save_path', 
+or specify the cutoff matrix file by user himself with parameter cutoff.matrix.name}
+
+\item{cutoff.matrix.name}{the name of local motif score cutoff file, if the file is
+not present, motifscanR will generate by itself and save in the current
+working directory as './[cutoff.matrix.name]_cutoff_motifs_matrix.Rdata'(default),
 and the user could specify a specific file directory with 'save_path', so user
 could use the next time if the pwms and the genome are same.}
 }
@@ -158,25 +170,25 @@ Background nucleotide frequencies can be set to "genome" for
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{pwms = PWMatrixList,subject = DNAStringSet}: PWMatrixList/DNAStringSet
+\item \code{motifScan(pwms = PWMatrixList, subject = DNAStringSet)}: PWMatrixList/DNAStringSet
 
-\item \code{pwms = PWMatrixList,subject = character}: PWMatrixList/character
+\item \code{motifScan(pwms = PWMatrixList, subject = character)}: PWMatrixList/character
 
-\item \code{pwms = PWMatrixList,subject = DNAString}: PWMatrixList/DNAString
+\item \code{motifScan(pwms = PWMatrixList, subject = DNAString)}: PWMatrixList/DNAString
 
-\item \code{pwms = PWMatrixList,subject = GenomicRanges}: PWMatrixList/GenomicRanges
+\item \code{motifScan(pwms = PWMatrixList, subject = GenomicRanges)}: PWMatrixList/GenomicRanges
 
-\item \code{pwms = PWMatrixList,subject = RangedSummarizedExperiment}: PWMatrixList/RangedSummarizedExperiment
+\item \code{motifScan(pwms = PWMatrixList, subject = RangedSummarizedExperiment)}: PWMatrixList/RangedSummarizedExperiment
 
-\item \code{pwms = PWMatrixList,subject = BSgenomeViews}: PWMatrixList/BSGenomeViews
+\item \code{motifScan(pwms = PWMatrixList, subject = BSgenomeViews)}: PWMatrixList/BSGenomeViews
 
-\item \code{pwms = PFMatrixList,subject = ANY}: PFMatrixList/ANY
+\item \code{motifScan(pwms = PFMatrixList, subject = ANY)}: PFMatrixList/ANY
 
-\item \code{pwms = PWMatrix,subject = ANY}: PWMatrix/ANY
+\item \code{motifScan(pwms = PWMatrix, subject = ANY)}: PWMatrix/ANY
 
-\item \code{pwms = PFMatrix,subject = ANY}: PFMatrix/ANY
+\item \code{motifScan(pwms = PFMatrix, subject = ANY)}: PFMatrix/ANY
+
 }}
-
 \examples{
 example_motifs <- getJasparMotifs(species = "Homo sapiens",
                                   collection = "CORE")

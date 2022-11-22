@@ -45,9 +45,9 @@ with the same chromosome and region width of given regions.
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{GenomicRanges}: GenomicRanges
-}}
+\item \code{generateControl(GenomicRanges)}: GenomicRanges
 
+}}
 \examples{
 library(BSgenome.Hsapiens.UCSC.hg19)
 library(TxDb.Hsapiens.UCSC.hg19.knownGene)

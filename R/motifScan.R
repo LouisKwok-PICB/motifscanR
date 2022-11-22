@@ -116,6 +116,11 @@ motifScan_helper <- function(pwms, seqs, genome, bg, p.cutoff, out, ranges,
 #' @param cutoff.matrix.loc the location of local motif score cutoff file, if the file is
 #'  not present, motifscanR will generate by itself and save in the current
 #'  working directory as './species_collect_cutoff_motifs_matrix.Rdata'(default),
+#'  and the user could specify a specific file directory with 'save_path', 
+#'  or specify the cutoff matrix file by user himself with parameter cutoff.matrix.name
+#' @param cutoff.matrix.name the name of local motif score cutoff file, if the file is
+#'  not present, motifscanR will generate by itself and save in the current
+#'  working directory as './[cutoff.matrix.name]_cutoff_motifs_matrix.Rdata'(default),
 #'  and the user could specify a specific file directory with 'save_path', so user
 #'  could use the next time if the pwms and the genome are same.
 #' @param ... additional arguments depending on inputs
@@ -162,19 +167,26 @@ setMethod("motifScan", signature(pwms = "PWMatrixList",
                    bg = c("genome","subject","even"),
                    out = c("matches", "scores", "positions"),
                    p.cutoff = 1e-04, ranges = NULL,
-                   thread = 1, random.seed = NULL, cutoff.matrix.loc  = './') {
+                   thread = 1, random.seed = NULL, 
+                   cutoff.matrix.loc  = './', cutoff.matrix.name = NULL) {
             message('Checking input arugements...')
             out <- match.arg(out)
-
+            
             if (is.numeric(bg)){
               bg <- check_bg(bg)
             } else{
               bg_method <- match.arg(bg)
               bg <- get_bg(bg_method, subject, genome)
             }
-
+            
             seqs <- as.character(subject)
-            cutoff.matrix.loc <- path.connect(cutoff.matrix.loc, get.locfile(pwms, genome))
+            if (is.null(cutoff.matrix.name)) {
+              cutoff.matrix.loc <- path.connect(cutoff.matrix.loc, get.locfile(pwms, genome))
+            }else{
+              cutoff.matrix.loc <- path.connect(cutoff.matrix.loc, 
+                                                paste0(cutoff.matrix.name, 
+                                                       '_cutoff_motifs_matrix.Rdata'))
+            }
             motifScan_helper(pwms, seqs, genome, bg, p.cutoff, out, ranges,
                              thread, random.seed, cutoff.matrix.loc)
           })
@@ -189,17 +201,24 @@ setMethod("motifScan", signature(pwms = "PWMatrixList",
                    bg = c("genome","subject","even"),
                    out = c("matches", "scores",  "positions"),
                    p.cutoff = 1e-04, ranges = NULL,
-                   thread = 1, random.seed = NULL, cutoff.matrix.loc = './') {
+                   thread = 1, random.seed = NULL, 
+                   cutoff.matrix.loc  = './', cutoff.matrix.name = NULL) {
             message('Checking input arugements...')
             out <- match.arg(out)
-
+            
             if (is.numeric(bg)){
               bg <- check_bg(bg)
             } else{
               bg_method <- match.arg(bg)
               bg <- get_bg(bg_method, subject, genome)
             }
-            cutoff.matrix.loc <- path.connect(cutoff.matrix.loc, get.locfile(pwms, genome))
+            if (is.null(cutoff.matrix.name)) {
+              cutoff.matrix.loc <- path.connect(cutoff.matrix.loc, get.locfile(pwms, genome))
+            }else{
+              cutoff.matrix.loc <- path.connect(cutoff.matrix.loc, 
+                                                paste0(cutoff.matrix.name, 
+                                                       '_cutoff_motifs_matrix.Rdata'))
+            }
             motifScan_helper(pwms, subject, genome, bg, p.cutoff, out, ranges,
                              thread, random.seed, cutoff.matrix.loc)
           })
@@ -214,19 +233,26 @@ setMethod("motifScan", signature(pwms = "PWMatrixList",
                    bg = c("genome","subject","even"),
                    out = c("matches", "scores", "positions"),
                    p.cutoff = 1e-04, ranges = NULL,
-                   thread = 1, random.seed = NULL, cutoff.matrix.loc = './') {
+                   thread = 1, random.seed = NULL, 
+                   cutoff.matrix.loc  = './', cutoff.matrix.name = NULL) {
             message('Checking input arugements...')
             out <- match.arg(out)
-
+            
             if (is.numeric(bg)){
               bg <- check_bg(bg)
             } else{
               bg_method <- match.arg(bg)
               bg <- get_bg(bg_method, subject, genome)
             }
-
+            
             seqs <- as.character(subject)
-            cutoff.matrix.loc <- path.connect(cutoff.matrix.loc, get.locfile(pwms, genome))
+            if (is.null(cutoff.matrix.name)) {
+              cutoff.matrix.loc <- path.connect(cutoff.matrix.loc, get.locfile(pwms, genome))
+            }else{
+              cutoff.matrix.loc <- path.connect(cutoff.matrix.loc, 
+                                                paste0(cutoff.matrix.name, 
+                                                       '_cutoff_motifs_matrix.Rdata'))
+            }
             motifScan_helper(pwms, seqs, genome, bg, p.cutoff, out, ranges,
                              thread, random.seed, cutoff.matrix.loc)
           })
@@ -241,7 +267,8 @@ setMethod("motifScan", signature(pwms = "PWMatrixList",
                    bg = c("genome","subject","even"),
                    out = c("matches", "scores", "positions"),
                    p.cutoff = 1e-04, thread = 1,
-                   random.seed = NULL, cutoff.matrix.loc = './') {
+                   random.seed = NULL,
+                   cutoff.matrix.loc  = './', cutoff.matrix.name = NULL) {
             message('Checking input arugements...')
             out <- match.arg(out)
             GenomicRanges::strand(subject) <- "+"
@@ -249,16 +276,23 @@ setMethod("motifScan", signature(pwms = "PWMatrixList",
             GenomicRanges::start(subject_seq) <- GenomicRanges::start(subject_seq) + 1
             genome <- validate_genome_input(genome)
             seqs <- BSgenome::getSeq(genome, subject_seq)
-
+            
             if (is.numeric(bg)){
               bg <- check_bg(bg)
             } else{
               bg_method <- match.arg(bg)
               bg <- get_bg(bg_method, seqs, genome)
             }
-
+            
             seqs <- as.character(seqs)
-            cutoff.matrix.loc <- path.connect(cutoff.matrix.loc, get.locfile(pwms, genome))
+            
+            if (is.null(cutoff.matrix.name)) {
+              cutoff.matrix.loc <- path.connect(cutoff.matrix.loc, get.locfile(pwms, genome))
+            }else{
+              cutoff.matrix.loc <- path.connect(cutoff.matrix.loc, 
+                                                paste0(cutoff.matrix.name, 
+                                                       '_cutoff_motifs_matrix.Rdata'))
+            }
             motifScan_helper(pwms, seqs, genome, bg, p.cutoff, out, subject,
                              thread, random.seed, cutoff.matrix.loc)
           })
@@ -272,7 +306,8 @@ setMethod("motifScan", signature(pwms = "PWMatrixList",
                    bg = c("genome","subject","even"),
                    out = c("matches", "scores", "positions"),
                    p.cutoff = 1e-04, thread = 1,
-                   random.seed = NULL, cutoff.matrix.loc = './') {
+                   random.seed = NULL, 
+                   cutoff.matrix.loc  = './', cutoff.matrix.name = NULL) {
             message('Checking input arugements...')
             out <- match.arg(out)
             motifScan(pwms, rowRanges(subject),
@@ -281,7 +316,8 @@ setMethod("motifScan", signature(pwms = "PWMatrixList",
                       out = out,
                       p.cutoff = p.cutoff,
                       thread, random.seed,
-                      cutoff.matrix.loc)
+                      cutoff.matrix.loc, 
+                      cutoff.matrix.name)
           })
 
 #' @describeIn motifScan PWMatrixList/BSGenomeViews
@@ -293,21 +329,29 @@ setMethod("motifScan", signature(pwms = "PWMatrixList",
                    bg = c("genome","subject","even"),
                    out = c("matches", "scores", "positions"),
                    p.cutoff = 1e-04, thread = 1,
-                   random.seed = NULL, cutoff.matrix.loc = './') {
+                   random.seed = NULL, 
+                   cutoff.matrix.loc  = './', cutoff.matrix.name = NULL) {
             message('Checking input arugements...')
             out <- match.arg(out)
             seqs <- as.character(subject)
             ranges <- BSgenome::granges(subject)
-
+            
             if (is.numeric(bg)){
               bg <- check_bg(bg)
             } else{
               bg_method <- match.arg(bg)
               bg <- get_bg(bg_method, subject, BSgenome::subject(subject))
             }
-
+            
             seqs <- as.character(subject)
-            cutoff.matrix.loc <- path.connect(cutoff.matrix.loc, get.locfile(pwms, genome))
+            
+            if (is.null(cutoff.matrix.name)) {
+              cutoff.matrix.loc <- path.connect(cutoff.matrix.loc, get.locfile(pwms, genome))
+            }else{
+              cutoff.matrix.loc <- path.connect(cutoff.matrix.loc, 
+                                                paste0(cutoff.matrix.name, 
+                                                       '_cutoff_motifs_matrix.Rdata'))
+            }
             motifScan_helper(pwms, seqs, genome, bg,
                              p.cutoff, out, ranges,
                              thread, random.seed, cutoff.matrix.loc)
@@ -322,11 +366,11 @@ setMethod("motifScan", signature(pwms = "PFMatrixList", subject = "ANY"),
           function(pwms,
                    subject,
                    ...) {
-
+            
             pwms_list <- do.call(PWMatrixList, lapply(pwms, toPWM))
             motifScan(pwms_list,
-                        subject,
-                        ...)
+                      subject,
+                      ...)
           })
 
 # Single PWM input -------------------------------------------------------------
@@ -337,11 +381,11 @@ setMethod("motifScan", signature(pwms = "PWMatrix", subject = "ANY"),
           function(pwms,
                    subject,
                    ...) {
-
+            
             pwms_list <- PWMatrixList(pwms)
             motifScan(pwms_list,
-                        subject,
-                        ...)
+                      subject,
+                      ...)
           })
 
 
@@ -354,9 +398,9 @@ setMethod("motifScan",
           function(pwms,
                    subject,
                    ...) {
-
+            
             pwms_list <- PWMatrixList(toPWM(pwms, pseudocounts=0.001))
             motifScan(pwms_list,
-                        subject,
-                        ...)
+                      subject,
+                      ...)
           })
