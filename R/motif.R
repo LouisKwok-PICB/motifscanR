@@ -9,7 +9,7 @@
 #' \code{\link[TFBSTools]{getMatrixSet}}
 #'
 #' @details Simply a wrapper function for \code{\link[TFBSTools]{getMatrixSet}}
-#'  that calls JASPAR2020 database using \code{\link[JASPAR2020]{JASPAR2020}}
+#'  that calls JASPAR2022 database using \code{\link[JASPAR2022]{JASPAR2022}}
 #'
 #' @return \code{\link[TFBSTools]{PFMatrixList}}
 #'
@@ -26,7 +26,7 @@ getJasparMotifs <- function(species = "Homo sapiens",
   opts["species"] <- species
   opts["collection"] <- collection
   opts <- c(opts, list(...))
-  out <- TFBSTools::getMatrixSet(JASPAR2020::JASPAR2020, opts)
+  out <- TFBSTools::getMatrixSet(JASPAR2022::JASPAR2022, opts)
   if (!isTRUE(all.equal(TFBSTools::name(out), names(out))))
     names(out) <- paste(names(out), TFBSTools::name(out), sep = "_")
   return(out)

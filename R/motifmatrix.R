@@ -92,8 +92,9 @@ scan_motif <- function(pwms, seqs, strand = c('+', '-', 'both'),
     stop(paste0("PWM has no motif score cutoff set for P-value ", p_value))
   }
   cl <- makeCluster(thread)
-  motif_sites <- parallel::parSapply(cl, pwms, function(pwm){scan_pwm(seqs, pwm, strand,
-                                                                      p_value, remove_dup, out)})
+  motif_sites <- pbapply::pbsapply(pwms, function(pwm){scan_pwm(seqs, pwm, strand,
+                                                                      p_value, remove_dup, out)},
+                                   cl = cl)
   stopCluster(cl)
   return(motif_sites)
 }

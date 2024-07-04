@@ -51,7 +51,7 @@ motifScan_helper <- function(pwms, seqs, genome, bg, p.cutoff, out, ranges,
     tmp_out <- get_motif_positions(pwms, seqs, genome, p.cutoff, thread, random.seed, cutoff.matrix.loc)
     cl <- makeCluster(thread)
     if (is.null(ranges)) {
-      out <- parallel::parLapply(cl, 1:length(motif_mats), function(x) {
+      out <- pbapply::pblapply(1:length(motif_mats), function(x) {
         IRangesList(lapply(seq_along(seqs),
                            function(y){
                              tmp <- IRanges(start = tmp_out$motifLocations[[y,x]] + 1,
@@ -60,10 +60,10 @@ motifScan_helper <- function(pwms, seqs, genome, bg, p.cutoff, out, ranges,
                                                      score = tmp_out$motifScores[[y,x]])
                              tmp
                            }))
-      })
+      }, cl = cl)
       names(out) <- names(pwms)
     } else {
-      out <- parallel::parLapply(cl, 1:length(motif_mats), function(x) {
+      out <- pbapply::pblapply(1:length(motif_mats), function(x) {
         mx_ix <- unlist(lapply(seq_along(seqs), function(y){rep(y, length(tmp_out$motifLocations[[y,x]]))}))
         GRanges(seqnames(ranges)[mx_ix],
                 IRanges(start =
@@ -73,7 +73,7 @@ motifScan_helper <- function(pwms, seqs, genome, bg, p.cutoff, out, ranges,
                 strand = unlist(tmp_out$motifStrands[,x]),
                 score = unlist(tmp_out$motifScores[,x])
         )
-      })
+      }, cl = cl)
       names(out) <- names(pwms)
       out <- GRangesList(out)
     }
