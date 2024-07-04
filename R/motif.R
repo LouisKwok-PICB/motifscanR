@@ -147,6 +147,6 @@ setMethod("setCutoff", signature(object = "PWMCutoffList",
               names(cutoffs) <- as.numeric(paste0('1e-', 2:(n_bits - 1)))
               pwm@score <- cutoffs
               pwm
-              }))
+            }))
             return(pwm_list)
           })

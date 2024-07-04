@@ -5,7 +5,7 @@ get_motif_ix <- function(pwms, seqs, genome, p.cutoff, thread, random.seed, loc.
     load(loc.file)
   }else{
     message("Not found motif score cutoff matrix.")
-    cutoff_motifs_matrix <- motifs_cutoff(pwms, genome, random.seed=random.seed)
+    cutoff_motifs_matrix <- motifs_cutoff(pwms, genome, random.seed=random.seed, thread=thread)
     save(cutoff_motifs_matrix, file = loc.file)
   }
   message("Scanning motifs...\n")
@@ -22,14 +22,14 @@ get_motif_ix_plus <- function(pwms, seqs, genome, p.cutoff, thread, random.seed,
     load(loc.file)
   }else{
     message("Not found motif score cutoff matrix.")
-    cutoff_motifs_matrix <- motifs_cutoff(pwms, genome, random.seed=random.seed)
+    cutoff_motifs_matrix <- motifs_cutoff(pwms, genome, random.seed=random.seed, thread=thread)
     save(cutoff_motifs_matrix, file = loc.file)
   }
   message("Scanning motifs...\n")
-
+  
   motif_sites <- scan_motif(cutoff_motifs_matrix, seqs, strand = 'both', out = "scores",
                             p_value = p.cutoff, remove_dup = FALSE, thread = thread)
-
+  
   motif_sites_score <- matrix(sapply(motif_sites, function(x){
     if (length(x) > 0) {
       max(x)
@@ -51,7 +51,7 @@ get_motif_positions <- function(pwms, seqs, genome, p.cutoff, thread, random.see
     load(loc.file)
   }else{
     message("Not found motif score cutoff matrix.")
-    cutoff_motifs_matrix <- motifs_cutoff(pwms, genome, random.seed=random.seed)
+    cutoff_motifs_matrix <- motifs_cutoff(pwms, genome, random.seed=random.seed, thread=thread)
     save(cutoff_motifs_matrix, file = loc.file)
   }
   message("Scanning motifs...\n")
@@ -60,10 +60,10 @@ get_motif_positions <- function(pwms, seqs, genome, p.cutoff, thread, random.see
   motif_sites_scores <- matrix(sapply(motif_sites, function(x){
     if (length(x$scores) > 0) {
       x$scores
-      }else{
-        NULL
-        }
-    }), ncol = dim(motif_sites)[2])
+    }else{
+      NULL
+    }
+  }), ncol = dim(motif_sites)[2])
   motif_sites_locations <- matrix(sapply(motif_sites, function(x){
     if (length(x$locations) > 0) {
       x$locations
@@ -93,7 +93,7 @@ scan_motif <- function(pwms, seqs, strand = c('+', '-', 'both'),
   }
   cl <- makeCluster(thread)
   motif_sites <- pbapply::pbsapply(pwms, function(pwm){scan_pwm(seqs, pwm, strand,
-                                                                      p_value, remove_dup, out)},
+                                                                p_value, remove_dup, out)},
                                    cl = cl)
   stopCluster(cl)
   return(motif_sites)
@@ -198,7 +198,7 @@ pick_motif_max <- function(sliding_scores, cutoff,
 
 # ----- motif cutoff matrix -------
 motifs_cutoff <- function(pwms, genome,
-                          random_n=1000000, random.seed=NULL){
+                          random_n=1000000, random.seed=NULL, thread=thread){
   if (random_n < 100) {
     stop("each motif must have at least 100 sampling scores")
   }
@@ -209,21 +209,22 @@ motifs_cutoff <- function(pwms, genome,
   rc_random_seqs <- as.character(reverseComplement(DNAStringSet(random_seqs)))
   pwms_cutoff <- PWMCutoffList(pwms)
   message('Begin to scan motif score for random sequences...')
+  cl <- makeCluster(thread)
   start_time <- Sys.time()
-  sampling_scores <- t(as.matrix(as.data.frame(lapply(pwms_cutoff@listData,
-                                                      function(pwm){
-                                                        pwm_name <- paste0(c(pwm@ID, pwm@name), collapse = '_')
-                                                        message(paste('Scanning', pwm_name,
-                                                                      paste0('[', match(pwm_name, names(pwms_cutoff)), '/', length(pwms_cutoff), ']')))
-                                                        pwm_matrix <- as.matrix(pwm)
-                                                        scores <- motif_score(pwm_matrix, length(pwm),
-                                                                              MaxScore(pwm), random_seqs)
-                                                        rc_scores <- motif_score(pwm_matrix, length(pwm),
-                                                                                 MaxScore(pwm), rc_random_seqs)
-                                                        score_max <- apply(rbind(scores, rc_scores), 2, max)
-                                                        return(score_max)
-                                                      }))))
+  sampling_scores <- t(as.matrix(as.data.frame(pbapply::pblapply(pwms_cutoff@listData,
+                                                                 function(pwm){
+                                                                   pwm_name <- paste0(c(pwm@ID, pwm@name), collapse = '_')
+                                                                   pwm_matrix <- as.matrix(pwm)
+                                                                   scores <- motif_score(pwm_matrix, length(pwm),
+                                                                                         MaxScore(pwm), random_seqs)
+                                                                   rc_scores <- motif_score(pwm_matrix, length(pwm),
+                                                                                            MaxScore(pwm), rc_random_seqs)
+                                                                   score_max <- apply(rbind(scores, rc_scores), 2, max)
+                                                                   return(score_max)
+                                                                 },
+                                                                 cl = cl))))
   end_time <- Sys.time()
+  stopCluster(cl)
   duration <- difftime(end_time, start_time)
   message(paste("  Took", round(duration[[1]], 2),  units(duration), "to run."))
   pwms_add_score <- setCutoff(pwms_cutoff, sampling_scores)
@@ -234,7 +235,7 @@ motifs_cutoff <- function(pwms, genome,
 # ------ random select n seqs from genome ------
 random_genome <- function(n_select, genome, len, random.seed = NULL){
   set.seed(random.seed)
-
+  
   message("    Calculating chromosome weight...")
   start_time <- Sys.time()
   if (class(genome) == "FaFile") {
@@ -249,12 +250,12 @@ random_genome <- function(n_select, genome, len, random.seed = NULL){
   end_time <- Sys.time()
   duration <- difftime(end_time, start_time)
   message(paste("    Took", round(duration[[1]], 2),  units(duration), "to run."))
-
+  
   message("    Generating random sequences...")
   random_start <- Sys.time()
   random_chroms <- sample(names(chrom_weight), n_select,
                           prob = chrom_weight, replace = TRUE)
-
+  
   seqs_loc <- data.frame(seqnames=random_chroms, start=0)
   for(chrom in unique(seqs_loc$seqnames)){
     seqs_loc_idx <- rownames(seqs_loc[seqs_loc$seqnames == chrom,])
@@ -265,7 +266,7 @@ random_genome <- function(n_select, genome, len, random.seed = NULL){
   seqs_gr <- GRanges(seqs_loc)
   seqs <- as.character(BSgenome::getSeq(genome, seqs_gr))
   seqs <- seqs[letterFrequency(DNAStringSet(seqs), 'N', as.prob = TRUE) == 0]
-
+  
   while(length(seqs) < n_select){
     add_random_chrom_idx <- sample(1:n_select, n_select - length(seqs), replace=TRUE)
     add_seqs_loc <- data.frame(seqnames=random_chroms[add_random_chrom_idx], start=0)
@@ -278,10 +279,10 @@ random_genome <- function(n_select, genome, len, random.seed = NULL){
     add_seqs_gr <- GRanges(add_seqs_loc)
     add_seqs <- as.character(BSgenome::getSeq(genome, add_seqs_gr))
     add_seqs <- add_seqs[letterFrequency(DNAStringSet(add_seqs), 'N', as.prob = TRUE) == 0]
-
+    
     seqs <- c(seqs, add_seqs)
   }
-
+  
   random_end <- Sys.time()
   random_duration <- difftime(random_end, random_start)
   message(paste("    Took", round(random_duration[[1]], 2),  units(random_duration), "to run.\n"))

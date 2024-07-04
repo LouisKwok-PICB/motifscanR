@@ -11,16 +11,16 @@ generate_control_regions_helper <- function(regions, chrom.size, n.random, genes
   } else{
     control_regions_df$start <- apply(control_regions_df, 1, function(x){
       genes_chrom <- genes[genes@seqnames==x['chromosome']]
-
+      
       if (length(genes_chrom) == 0) {
         return(NA)
       }
-
+      
       distance_tss <- distance2nearestTss(as.integer(x['start_old']), genes_chrom)
       if (is.null(distance_tss)) {
         distance_tss <- sample(10000:100000, 1)
       }
-
+      
       start_temp <- randomStartFromGene(genes_chrom, distance_tss, random.seed)
       while (start_temp < 1| start_temp > (chrom.size[x['chromosome']] - as.integer(x['width']))) {
         start_temp <- startFromGene(genes_chrom, distance_tss)
