@@ -259,7 +259,7 @@ distance2nearestTss <- function(start.loc, genes, distance.cutoff=10000){
   genes.tss <- promoters(genes, upstream = 0, downstream = 1)
   dis_tss <- start.loc - genes.tss@ranges@start
   if (any(abs(dis_tss) < distance.cutoff)) {
-    dis_neartest <- dis_tss[which(abs(dis_tss) == min(abs(dis_tss)))]
+    dis_neartest <- dis_tss[which(abs(dis_tss) == min(abs(dis_tss)))[1]]
     if (genes.tss[which(dis_tss == dis_neartest)]@strand@values == '-') {
       dis_neartest <- -dis_neartest
     }

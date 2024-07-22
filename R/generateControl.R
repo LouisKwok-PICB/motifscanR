@@ -23,7 +23,7 @@ generate_control_regions_helper <- function(regions, chrom.size, n.random, genes
       
       start_temp <- randomStartFromGene(genes_chrom, distance_tss, random.seed)
       while (start_temp < 1| start_temp > (chrom.size[x['chromosome']] - as.integer(x['width']))) {
-        start_temp <- startFromGene(genes_chrom, distance_tss)
+        start_temp <- randomStartFromGene(genes_chrom, distance_tss, random.seed)
       }
       start_legal <- start_temp
       return(start_legal)
